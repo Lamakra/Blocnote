@@ -1,192 +1,138 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>موقع زيادة المتابعين القانوني</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      direction: rtl;
-    }
-    header {
-      background: #4a90e2;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    main {
-      max-width: 900px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-    }
-    h2 {
-      color: #333;
-    }
-    input, button, select {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    button {
-      background: #4a90e2;
-      color: white;
-      cursor: pointer;
-      border: none;
-    }
-    button:hover {
-      background: #357ab8;
-    }
-    #userPanel {
-      display: none;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    ul li {
-      background: #eee;
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>موقع المتابعين العالمي</title>
+<style>
+  body { font-family: Arial,sans-serif; background:#f5f5f5; direction:rtl; margin:0; padding:0; }
+  header { background:#4a90e2; color:white; padding:20px; text-align:center; }
+  main { max-width:900px; margin:20px auto; background:white; border-radius:10px; padding:20px; box-shadow:0 4px 8px rgba(0,0,0,0.1);}
+  button { padding:10px; margin:5px 0; width:100%; border-radius:5px; border:none; cursor:pointer; color:white;}
+  #fbLogin { background:#4267B2; }
+  #igLogin { background:#E1306C; }
+  #userPanel { display:none; }
+  ul { list-style:none; padding:0; }
+  ul li { background:#eee; margin:5px 0; padding:10px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; }
+  .ad { text-align:center; margin:20px 0; background:#ddd; padding:10px; border-radius:5px; }
+</style>
 </head>
 <body>
 
 <header>
-  <h1>موقع المتابعين القانوني</h1>
+  <h1>موقع المتابعين العالمي</h1>
 </header>
 
 <main>
-  <!-- نموذج تسجيل الدخول -->
-  <div id="loginForm">
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني">
-    <input type="password" id="password" placeholder="كلمة المرور">
-    <button onclick="login()">تسجيل الدخول</button>
-    <p>أو <a href="#" onclick="showRegister()">إنشاء حساب جديد</a></p>
+<div id="loginSection">
+  <h2>تسجيل الدخول بحسابك الاجتماعي</h2>
+  <button id="fbLogin" onclick="loginFacebook()">تسجيل الدخول باستخدام فيسبوك</button>
+  <button id="igLogin" onclick="loginInstagram()">تسجيل الدخول باستخدام إنستغرام</button>
+</div>
+
+<div id="userPanel">
+  <h2>لوحة المستخدم</h2>
+  <p>مرحباً، <span id="userName"></span>! لديك <span id="userPoints">0</span> نقطة و <span id="userCurrency">0</span> عملة.</p>
+
+  <h3>أضف حسابك للمشاركة:</h3>
+  <input type="text" id="socialAccount" placeholder="رابط الحساب أو اسم المستخدم">
+  <button onclick="addAccount()">إضافة الحساب</button>
+
+  <h3>الحسابات المتاحة للتفاعل:</h3>
+  <ul id="accountsList"></ul>
+
+  <div class="ad">
+    <p>إعلان تجريبي</p>
+    <button onclick="watchAd()">شاهد الإعلان للحصول على 10 عملة</button>
   </div>
 
-  <!-- نموذج التسجيل -->
-  <div id="registerForm" style="display:none;">
-    <h2>إنشاء حساب جديد</h2>
-    <input type="text" id="regName" placeholder="الاسم الكامل">
-    <input type="email" id="regEmail" placeholder="البريد الإلكتروني">
-    <input type="password" id="regPassword" placeholder="كلمة المرور">
-    <button onclick="register()">إنشاء الحساب</button>
-    <p>لديك حساب؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a></p>
-  </div>
-
-  <!-- لوحة المستخدم -->
-  <div id="userPanel">
-    <h2>لوحة المستخدم</h2>
-    <p>مرحباً، <span id="userName"></span>! لديك <span id="userPoints">0</span> نقطة.</p>
-
-    <h3>أضف حسابك لزيادة المتابعين:</h3>
-    <input type="text" id="socialAccount" placeholder="رابط الحساب أو اسم المستخدم">
-    <button onclick="addAccount()">إضافة الحساب</button>
-
-    <h3>الحسابات المتاحة للمتابعة:</h3>
-    <ul id="accountsList"></ul>
-  </div>
+  <button onclick="buyCurrency()">شراء عملة</button>
+  <button onclick="logout()">تسجيل الخروج</button>
+</div>
 </main>
 
 <script>
-  let users = [];
-  let currentUser = null;
-  let accounts = [];
+let users = [];
+let currentUser = null;
+let accounts = [];
 
-  function showRegister() {
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('registerForm').style.display = 'block';
-  }
+// تسجيل دخول محاكى
+function loginFacebook() { currentUser={name:"مستخدم فيسبوك", platform:"Facebook", points:0, currency:0, addedAccounts:[]}; showUserPanel();}
+function loginInstagram() { currentUser={name:"مستخدم إنستغرام", platform:"Instagram", points:0, currency:0, addedAccounts:[]}; showUserPanel();}
 
-  function showLogin() {
-    document.getElementById('registerForm').style.display = 'none';
-    document.getElementById('loginForm').style.display = 'block';
-  }
+function showUserPanel(){
+  document.getElementById('loginSection').style.display='none';
+  document.getElementById('userPanel').style.display='block';
+  document.getElementById('userName').textContent=currentUser.name;
+  updatePointsAndCurrency();
+  updateAccountsList();
+}
 
-  function register() {
-    const name = document.getElementById('regName').value;
-    const email = document.getElementById('regEmail').value;
-    const password = document.getElementById('regPassword').value;
+function logout(){
+  currentUser=null;
+  document.getElementById('userPanel').style.display='none';
+  document.getElementById('loginSection').style.display='block';
+}
 
-    if (!name || !email || !password) {
-      alert('الرجاء تعبئة جميع الحقول');
-      return;
+// إضافة حساب المستخدم
+function addAccount(){
+  const account=document.getElementById('socialAccount').value.trim();
+  if(!account) return alert('الرجاء إدخال الحساب');
+  if(currentUser.addedAccounts.includes(account)) return alert('هذا الحساب مضاف مسبقاً');
+  currentUser.addedAccounts.push(account);
+  accounts.push({owner:currentUser.name, account, followers:0});
+  document.getElementById('socialAccount').value='';
+  updateAccountsList();
+}
+
+// تحديث النقاط والعملات
+function updatePointsAndCurrency(){
+  document.getElementById('userPoints').textContent=currentUser.points;
+  document.getElementById('userCurrency').textContent=currentUser.currency;
+}
+
+// عرض الحسابات المتاحة للتفاعل
+function updateAccountsList(){
+  const list=document.getElementById('accountsList');
+  list.innerHTML='';
+  accounts.forEach((a,index)=>{
+    if(a.owner!==currentUser.name){
+      const li=document.createElement('li');
+      li.textContent=`${a.account} (${a.owner})`;
+      const btn=document.createElement('button');
+      btn.textContent="تفاعل";
+      btn.onclick=()=>followAccount(index);
+      li.appendChild(btn);
+      list.appendChild(li);
     }
+  });
+}
 
-    users.push({ name, email, password, points: 0, addedAccounts: [] });
-    alert('تم إنشاء الحساب بنجاح!');
-    showLogin();
-  }
+// كسب النقاط والعملات بالتفاعل
+function followAccount(index){
+  accounts[index].followers+=1;
+  currentUser.points+=1;
+  currentUser.currency+=5;
+  updatePointsAndCurrency();
+  alert(`تم التفاعل! نقاطك: ${currentUser.points}, رصيد العملة: ${currentUser.currency}`);
+}
 
-  function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// مشاهدة إعلان لكسب عملة
+function watchAd(){
+  currentUser.currency+=10;
+  updatePointsAndCurrency();
+  alert(`شكراً لمشاهدتك الإعلان! رصيد العملة الآن: ${currentUser.currency}`);
+}
 
-    currentUser = users.find(u => u.email === email && u.password === password);
-    if (!currentUser) {
-      alert('البريد الإلكتروني أو كلمة المرور غير صحيحة');
-      return;
-    }
-
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('userPanel').style.display = 'block';
-    document.getElementById('userName').textContent = currentUser.name;
-    updatePoints();
-    updateAccountsList();
-  }
-
-  function addAccount() {
-    const account = document.getElementById('socialAccount').value.trim();
-    if (!account) return alert('أدخل الحساب أولاً');
-
-    currentUser.addedAccounts.push(account);
-    accounts.push({ owner: currentUser.name, account, followers: 0 });
-    document.getElementById('socialAccount').value = '';
-    updateAccountsList();
-  }
-
-  function updatePoints() {
-    document.getElementById('userPoints').textContent = currentUser.points;
-  }
-
-  function updateAccountsList() {
-    const list = document.getElementById('accountsList');
-    list.innerHTML = '';
-    accounts.forEach((a, index) => {
-      if (a.owner !== currentUser.name) { // لا يظهر حسابات المستخدم نفسه
-        const li = document.createElement('li');
-        li.textContent = a.account + ` (${a.owner})`;
-        const followBtn = document.createElement('button');
-        followBtn.textContent = 'متابعة';
-        followBtn.onclick = () => followAccount(index);
-        li.appendChild(followBtn);
-        list.appendChild(li);
-      }
-    });
-  }
-
-  function followAccount(index) {
-    accounts[index].followers += 1;
-    currentUser.points += 1;
-    updatePoints();
-    alert(`تمت المتابعة! عدد النقاط: ${currentUser.points}`);
-  }
+// شراء عملة (محاكاة)
+function buyCurrency(){
+  const amount=prompt("أدخل المبلغ الذي تريد شراءه (مثال: 50 عملة)");
+  const value=parseInt(amount);
+  if(isNaN(value) || value<=0) return alert("أدخل قيمة صحيحة");
+  currentUser.currency+=value;
+  updatePointsAndCurrency();
+  alert(`تمت عملية الشراء! رصيدك الآن: ${currentUser.currency}`);
+}
 </script>
 
 </body>
